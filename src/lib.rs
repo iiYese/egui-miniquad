@@ -136,7 +136,7 @@ pub struct EguiMq {
     painter: painter::Painter,
     #[cfg(target_os = "macos")]
     clipboard: Option<copypasta::ClipboardContext>,
-    shapes: Option<Vec<egui::epaint::ClippedShape>>,
+    shapes: Vec<egui::epaint::ClippedShape>,
     textures_delta: egui::TexturesDelta,
 }
 
@@ -152,7 +152,7 @@ impl EguiMq {
             egui_input: egui::RawInput::default(),
             #[cfg(target_os = "macos")]
             clipboard: init_clipboard(),
-            shapes: None,
+            shapes: Vec::new(),
             textures_delta: Default::default(),
         }
     }
@@ -194,10 +194,7 @@ impl EguiMq {
             viewport_output: _viewport_output, // we only support one viewport
         } = full_output;
 
-        if self.shapes.is_some() {
-            eprintln!("Egui contents not drawn. You need to call `draw` after calling `run`");
-        }
-        self.shapes = Some(shapes);
+        self.shapes.extend(shapes);
         self.pixels_per_point = pixels_per_point;
         self.textures_delta.append(textures_delta);
 
@@ -233,18 +230,16 @@ impl EguiMq {
     /// Call this when you need to draw egui.
     /// Must be called after `end_frame`.
     pub fn draw(&mut self, mq_ctx: &mut dyn mq::RenderingBackend) {
-        if let Some(shapes) = self.shapes.take() {
-            let meshes = self.egui_ctx.tessellate(shapes, self.pixels_per_point);
-            self.painter.paint_and_update_textures(
-                mq_ctx,
-                meshes,
-                &self.textures_delta,
-                &self.egui_ctx,
-            );
-            self.textures_delta.clear();
-        } else {
-            eprintln!("Failed to draw egui. You need to call `end_frame` before calling `draw`");
-        }
+        let meshes = self
+            .egui_ctx
+            .tessellate(std::mem::take(&mut self.shapes), self.pixels_per_point);
+        self.painter.paint_and_update_textures(
+            mq_ctx,
+            meshes,
+            &self.textures_delta,
+            &self.egui_ctx,
+        );
+        self.textures_delta.clear();
     }
 
     /// Call from your [`miniquad::EventHandler`].
