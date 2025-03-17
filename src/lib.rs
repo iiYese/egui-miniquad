@@ -417,6 +417,10 @@ fn to_mq_cursor_icon(cursor_icon: egui::CursorIcon) -> Option<mq::CursorIcon> {
         egui::CursorIcon::Crosshair => Some(mq::CursorIcon::Crosshair),
         egui::CursorIcon::Move => Some(mq::CursorIcon::Move),
         egui::CursorIcon::NotAllowed => Some(mq::CursorIcon::NotAllowed),
+        egui::CursorIcon::ResizeNorthWest => Some(mq::CursorIcon::NorthWestResize),
+        egui::CursorIcon::ResizeNorthEast => Some(mq::CursorIcon::NorthEastResize),
+        egui::CursorIcon::ResizeSouthEast => Some(mq::CursorIcon::SouthEastResize),
+        egui::CursorIcon::ResizeSouthWest => Some(mq::CursorIcon::SouthWestResize),
 
         // Similar enough
         egui::CursorIcon::AllScroll => Some(mq::CursorIcon::Move),
@@ -434,12 +438,8 @@ fn to_mq_cursor_icon(cursor_icon: egui::CursorIcon) -> Option<mq::CursorIcon> {
         | egui::CursorIcon::ResizeColumn
         | egui::CursorIcon::ResizeEast
         | egui::CursorIcon::ResizeNorth
-        | egui::CursorIcon::ResizeNorthEast
-        | egui::CursorIcon::ResizeNorthWest
         | egui::CursorIcon::ResizeRow
         | egui::CursorIcon::ResizeSouth
-        | egui::CursorIcon::ResizeSouthEast
-        | egui::CursorIcon::ResizeSouthWest
         | egui::CursorIcon::ResizeWest
         | egui::CursorIcon::VerticalText
         | egui::CursorIcon::ZoomIn
