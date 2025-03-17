@@ -19,8 +19,11 @@ include = ["../LICENSE-APACHE", "../LICENSE-MIT", "**/*.rs", "Cargo.toml"]
 [dependencies]
 bytemuck = "1.9"
 egui = { version = "0.31", features = ["bytemuck"] }
-miniquad = { version = "0.4" }
 quad-url = "0.1"
+
+[dependencies.miniquad]
+git = "https://github.com/not-fl3/miniquad.git"
+rev = "5c74b77"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 getrandom = { version = "0.2.7", features = ["custom"] }
